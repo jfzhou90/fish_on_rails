@@ -1,0 +1,19 @@
+.login__container.shadow
+  = image_tag "mainlogo.png", alt:"Go Fish Logo", class:"login__logo"
+  h1.login__title.disney-font.blue-4.text-shadow
+    | Fish on Rails
+  - if notice
+    .authentication_notice = notice
+  = form_for @user, url: {action: "create"}, html: {class: "login__form flex-column"} do |f|
+    = f.label :username, "Username", class:"login__label flex-row yellow sans-font text-shadow"
+    .flex-row.login__input--container
+      i.fa.fa-user aria-hidden="true"
+      = f.text_field :username, class:"login__input sil-font", autocomplete:"off", name:"username", value:"usernameA"
+    = f.label :password, "Password", class:"login__label flex-row yellow sans-font text-shadow"
+    .flex-row.login__input--container
+      i.fa.fa-key aria-hidden="true"
+      = f.text_field :password, class:"login__input sil-font", autocomplete:"off", name:"password", type:"password", value:"passwordB"
+    = f.submit "Login", class:"primary-button shadow yellow disney-font"
+  span.signup
+    | No account?
+    a href="#"  Sign up

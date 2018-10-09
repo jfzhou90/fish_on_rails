@@ -51,6 +51,15 @@
   padding: 10px;
 }
 
+.authentication_notice {
+  color:yellow;
+  background-color: red;
+  padding: 2px;
+  border-radius: 10px;
+  width: 30%;
+  margin:auto;
+}
+
 @media(max-width: 600px) {
   .login__container {
     width: 70%;
@@ -63,6 +72,11 @@
 
   .login__label {
     font-size: 15px;
+  }
+
+  .login__title {
+    font-size: 30px;
+    margin: 10px;
   }
 }
 
