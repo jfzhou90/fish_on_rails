@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  has_many :game_users, dependent: :destroy
+  has_many :games, through: :game_users
+
   validates :username,
             presence: true,
             length: { minimum: 8, maximum: 16 },

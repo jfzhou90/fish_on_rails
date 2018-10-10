@@ -27,6 +27,6 @@ RSpec.describe 'How_to_Play', type: :system do
     init
     click_on 'Got It'
     expect(page).to have_content(/Welcome/)
-    expect(page).to have_current_path('/')
+    expect(page).to have_current_path('/menu')
   end
 end

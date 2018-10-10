@@ -3,6 +3,7 @@
 class SessionsController < ApplicationController
   skip_before_action :require_authentication
   def new
+    redirect_to menu_index_path if session[:username]
     @user = User.new
   end
 
@@ -12,12 +13,12 @@ class SessionsController < ApplicationController
       session[:username] = params[:username]
       redirect_to menu_index_path
     else
-      redirect_to new_sessions_path, notice: 'Login to Play'
+      redirect_to root_path, notice: 'Login to Play'
     end
   end
 
   def destroy
     session.clear
-    redirect_to new_sessions_path
+    redirect_to root_path
   end
 end

@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :require_authentication
 
   def require_authentication
-    redirect_to new_sessions_path unless current_user && session[:username]
+    redirect_to new_session_path unless current_user && session[:username]
   end
 
   def current_user

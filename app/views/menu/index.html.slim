@@ -3,5 +3,5 @@
   a.primary-button.shadow.yellow.disney-font href="/play_setup" Play
   a.primary-button.shadow.yellow.disney-font href="/leaderboard" Leaderboard
   a.primary-button.shadow.yellow.disney-font href="/profile" Profile
-  a.primary-button.shadow.yellow.disney-font href="/how_to/index" How to Play
-  a.primary-button.shadow.yellow.disney-font href="#{sessions_path}" data-method="delete" Log Out
+  a.primary-button.shadow.yellow.disney-font href="/how_to" How to Play
+  = link_to "Log Out", session_path, method: :delete, class: "primary-button shadow yellow disney-font"

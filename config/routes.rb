@@ -1,19 +1,16 @@
 Rails.application.routes.draw do
-
-
-  get 'leaderboard/index'
-  get 'how_to/index'
-  get 'menu/index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   # static pages path
-  resource :menu, only: [:index]
-  resource :how_to, only: [:index]
+  resources :menu, only: [:index]
+  resources :how_to, only: [:index]
 
   # sessions path
-  resource :sessions, only: [:new, :create, :destroy]
+  resources :sessions, only: [:create]
+  resource :session, only: [:destroy]
 
-  # static menu path
+  # signup path
+  resources :signup, only: [:index, :create]
 
-  root 'menu#index'
+  root 'sessions#new'
 end

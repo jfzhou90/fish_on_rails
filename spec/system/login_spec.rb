@@ -15,12 +15,13 @@ RSpec.describe 'Login', type: :system do
   it 'requires authentication' do
     fill_in :password, with: 'passwordC'
     click_on 'Login'
-    expect(current_path).to eq '/sessions/new'
+    expect(current_path).to eq '/'
+    expect(page).to have_content('Login to Play')
   end
 
   it 'proceed to menu page' do
     fill_in :password, with: 'passwordB'
     click_on 'Login'
-    expect(current_path).to eq '/menu/index'
+    expect(current_path).to eq '/menu'
   end
 end

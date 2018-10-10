@@ -1,0 +1,17 @@
+.shadow.menu__container.flex-column
+  h1.login__title.disney-font.blue-4.text-shadow
+    | Sign Up
+  - if notice
+    .authentication_notice = notice
+  = form_for :user, url: {action: "create"}, html: {class: "login__form flex-column"} do |f|
+    = f.label :username, "Username", class:"login__label flex-row yellow sans-font text-shadow"
+    .flex-row.login__input--container
+      = f.text_field :username, class:"login__input sil-font", autocomplete:"off", placeholder:"YourUsername"
+    = f.label :password, "New Password", class:"login__label flex-row yellow sans-font text-shadow"
+    .flex-row.login__input--container
+      = f.text_field :password, class:"login__input sil-font", autocomplete:"off", type:"password",placeholder:"YourPassword"
+    = f.label :password_confirmation, "Confirm Password", class:"login__label flex-row yellow sans-font text-shadow"
+    .flex-row.login__input--container
+      = f.text_field :password_confirmation, class:"login__input sil-font", autocomplete:"off", type:"password",placeholder:"YourPassword"
+    = f.submit "Sign up", class:"primary-button shadow yellow disney-font"
+    = link_to "Cancel", root_path, class: "primary-button shadow yellow disney-font"
