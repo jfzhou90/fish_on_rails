@@ -3,7 +3,7 @@
 require_relative('./playing_card')
 
 class CardDeck
-  def initialize(cards: create_deck_of_cards)
+  def initialize(cards: CardDeck.create_deck_of_cards)
     @cards_left = cards
   end
 
@@ -34,19 +34,19 @@ class CardDeck
     CardDeck.new(cards: cards)
   end
 
-  private
-
-  attr_reader :cards_left
-
-  def create_deck_of_cards
+  def self.create_deck_of_cards
     suits = %w[Clubs Diamonds Hearts Spades]
     ranks = %w[2 3 4 5 6 7 8 9 10 Jack Queen King Ace]
-    ranks.map do |rank|
+    ranks.flat_map do |rank|
       suits.map do |suit|
         PlayingCard.new(rank: rank, suit: suit)
       end
-    end.flatten
+    end
   end
+
+  private
+
+  attr_reader :cards_left
 end
 
 # this is for testing.
@@ -71,9 +71,9 @@ class TestDeck < CardDeck
     suits = %w[Clubs Diamonds Hearts Spades]
     ranks = %w[2 3 4 King Ace]
     ranks.map do |rank|
-      suits.map do |suit|
+      suits.flat_map do |suit|
         PlayingCard.new(rank: rank, suit: suit)
       end
-    end.flatten
+    end
   end
 end
