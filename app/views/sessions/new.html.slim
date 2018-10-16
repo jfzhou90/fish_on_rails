@@ -8,7 +8,7 @@
     = f.label :username, "Username", class:"login__label flex-row yellow sans-font text-shadow"
     .flex-row.login__input--container
       i.fa.fa-user aria-hidden="true"
-      = f.text_field :username, class:"login__input sil-font", autocomplete:"off", name:"username", value:"usernameA"
+      = f.text_field :username, class:"login__input sil-font", autocomplete:"off", name:"username", value:"UsernameA"
     = f.label :password, "Password", class:"login__label flex-row yellow sans-font text-shadow"
     .flex-row.login__input--container
       i.fa.fa-key aria-hidden="true"
@@ -16,4 +16,4 @@
     = f.submit "Login", class:"primary-button shadow yellow disney-font"
   span.signup
     | No account?
-    a href="#{signup_index_path}"  Sign up
+    a href="#{signup_index_path}" Sign up

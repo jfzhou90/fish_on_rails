@@ -51,8 +51,10 @@ end
 
 # this is for testing.
 class TestDeck < CardDeck
+  attr_accessor :cards_left
+
   def initialize
-    super()
+    @cards_left = create_deck_of_cards
   end
 
   def shuffle
@@ -63,15 +65,11 @@ class TestDeck < CardDeck
     cards_left.shuffle!
   end
 
-  private
-
-  attr_reader :cards_left
-
   def create_deck_of_cards
     suits = %w[Clubs Diamonds Hearts Spades]
     ranks = %w[2 3 4 King Ace]
-    ranks.map do |rank|
-      suits.flat_map do |suit|
+    ranks.flat_map do |rank|
+      suits.map do |suit|
         PlayingCard.new(rank: rank, suit: suit)
       end
     end

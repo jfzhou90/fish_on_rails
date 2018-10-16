@@ -1,0 +1,40 @@
+ruby:
+  player = game.find_player(user)
+  other_players = game.other_players(player)
+  message = game.winner ? "#{game.winner.name} Wins!" : "#{game.current_player.name}'s Turn"
+
+javascript:
+  const confirm_quit = () => {
+    var result = confirm("Leaving? The AI will take over your turns if you leave.")
+    if(result) {
+      window.location = "/quit"
+    }
+  }
+
+.game__container
+  .game__info.flex-row
+    a.game__leave.blue-4 href='#' onClick="confirm_quit()" Quit
+    span.game__announcement.disney-font.yellow.text-shadow #{message}
+    input.game__logs-checkbox type="checkbox" id="logs" name="logs"
+      = render "modal", game: game
+    label.game__logs-label for="logs" Game Logs
+  = form_tag("/games/#{id}", method:"put") do
+    .game__row--players.flex-row
+      - if other_players.count >= 1
+        = render "opponent", player: other_players[0]
+      - if other_players.count >= 2
+        = render "opponent", player: other_players[1]
+    .game__row--players.flex-row
+      - if other_players.count >= 3
+        = render "opponent", player: other_players[2]
+      .pond__container
+        = image_tag("pond.png", alt:"Deck of Cards", class:"pond__image")
+        span.cards__left.disney-font.yellow.text-shadow-2 Cards Left : #{game.deck.deck_size}
+      - if other_players.count >= 4
+        = render "opponent", player: other_players[3]
+    .game__row--players.flex-row
+      = render "player", player: player
+    - if !game.current_player.nil? && game.current_player.name == user
+      = submit_tag('Play', class:'play__round')
+
+= console

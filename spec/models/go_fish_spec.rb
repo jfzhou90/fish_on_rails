@@ -152,4 +152,23 @@ describe(GoFishGame) do
       expect(game.players.count(&:auto)).to be(4)
     end
   end
+
+  describe('#as_json') do
+    it('creates a json object') do
+      expect(game_json['round']).to eq(0)
+      expect(game_json.key?('deck')).to be(true)
+    end
+  end
+
+  describe('#from_json') do
+    it('creates game class from json') do
+      expect(inflated_game).to be_instance_of(GoFishGame)
+    end
+
+    it('inflated player have the correct attributes') do
+      expect(inflated_game.send(:round)).to be(0)
+      expect(inflated_game.players.count).to be(0)
+      expect(inflated_game.deck).to be_instance_of(CardDeck)
+    end
+  end
 end

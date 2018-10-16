@@ -3,7 +3,7 @@
 class SessionsController < ApplicationController
   skip_before_action :require_authentication
   def new
-    redirect_to menu_index_path if session[:username]
+    redirect_to menu_index_path if current_user && session[:username]
     @user = User.new
   end
 

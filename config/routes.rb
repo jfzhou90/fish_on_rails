@@ -12,5 +12,8 @@ Rails.application.routes.draw do
   # signup path
   resources :signup, only: [:index, :create]
 
+  # games path
+  resources :games, only: [:new, :create, :show, :update]
+
   root 'sessions#new'
 end

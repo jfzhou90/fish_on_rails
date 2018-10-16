@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GameUser < ApplicationRecord
-  belongs_to :games
-  belongs_to :users
+  belongs_to :game
+  belongs_to :user
+  validates :user, uniqueness: { scope: :game, message: 'One Game User Per Game' }
 end

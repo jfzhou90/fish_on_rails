@@ -1,0 +1,12 @@
+.setup__container.flex-column
+  = form_for @game, url: {action: "create"}, html: {class: "setup__form"} do |f|
+    = f.label :player_count, "How many Players?", class:"blue-4 disney-font"
+    .flex-row.form__input
+      i.fa.fa-minus-circle
+      = f.number_field :player_count, in: 2..5, value: 2
+      i.fa.fa-plus-circle
+    .flex-column.form__buttons
+      = f.submit "Play", class:"primary-button shadow yellow disney-font"
+      a.primary-button.yellow.disney-font href='/' Cancel
+      span.setup__hint.blue-4.sans-font Game will auto populate in 15 seconds if nobody joins.
+

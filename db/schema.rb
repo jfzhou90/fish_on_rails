@@ -10,26 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_11_155605) do
+ActiveRecord::Schema.define(version: 2018_10_14_213653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "game_users", force: :cascade do |t|
-    t.bigint "games_id"
-    t.bigint "users_id"
+    t.bigint "game_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["games_id"], name: "index_game_users_on_games_id"
-    t.index ["users_id"], name: "index_game_users_on_users_id"
+    t.index ["game_id"], name: "index_game_users_on_game_id"
+    t.index ["user_id"], name: "index_game_users_on_user_id"
   end
 
   create_table "games", force: :cascade do |t|
-    t.jsonb "GoFish"
+    t.jsonb "gofish"
     t.datetime "started_at"
     t.datetime "finished_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "player_count", default: 2
   end
 
   create_table "users", force: :cascade do |t|
@@ -39,6 +40,6 @@ ActiveRecord::Schema.define(version: 2018_10_11_155605) do
     t.string "password_digest"
   end
 
-  add_foreign_key "game_users", "games", column: "games_id"
-  add_foreign_key "game_users", "users", column: "users_id"
+  add_foreign_key "game_users", "games"
+  add_foreign_key "game_users", "users"
 end

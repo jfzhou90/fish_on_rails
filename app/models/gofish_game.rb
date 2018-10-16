@@ -3,14 +3,15 @@
 require_relative('./deck')
 require_relative('./player')
 
-class GoFishGame
-  attr_reader :deck, :players, :winner, :game_id, :started
+class GoFishGame # rubocop:disable Metrics/ClassLength
+  attr_reader :deck, :players, :winner, :game_id, :started, :player_count
 
   def initialize(players: [], deck: CardDeck.new, round: 0, logs: [])
     @deck = deck
     @players = players
     @round = round
     @logs = logs
+    @winner = nil
   end
 
   def start
@@ -66,6 +67,26 @@ class GoFishGame
     return if winner
 
     play_round(random_player_name, random_rank) while !current_player.nil? && current_player.auto
+  end
+
+  def as_json
+    {
+      'deck' => deck.as_json,
+      'players' => players.map(&:as_json),
+      'round' => round,
+      'logs' => logs,
+      'winner' => winner
+    }
+  end
+
+  def self.from_json(game_json)
+    GoFishGame.new(
+      deck: CardDeck.from_json(game_json['deck']),
+      players: game_json['players'].map { |player| Player.from_json(player) },
+      round: game_json['round'],
+      logs: game_json['logs'],
+      winner: game_json['winner']
+    )
   end
 
   private

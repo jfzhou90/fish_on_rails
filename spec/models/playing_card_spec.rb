@@ -55,7 +55,7 @@ RSpec.describe PlayingCard do
     end
   end
 
-  describe('#from_json') do
+  describe('.from_json') do
     it('creates class object using json data') do
       expect(inflated_card).to be_instance_of(PlayingCard)
     end
