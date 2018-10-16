@@ -14,13 +14,28 @@ class Game < ApplicationRecord
   end
 
   def create_gofish_if_possible
-    update(gofish: GoFishGame.new.as_json) unless gofish
+    return false unless gofish.nil?
+
+    update(gofish: GoFishGame.new.as_json)
+    Thread.start do
+      sleep(15)
+      start_game_with_bots
+    end
+  end
+
+  def start_game_with_bots
+    return if started_at
+
+    game = GoFishGame.from_json(gofish)
+    game.fill_game_with_bots(player_count)
+    update!(gofish: game.as_json, started_at: Time.zone.now)
+    Pusher.trigger("game#{id}", 'refresh', { message: 'refresh' })
   end
 
   def add_player_to_game(name)
     gofish_game = GoFishGame.from_json(gofish)
     gofish_game.add_player(name)
-    update(gofish: gofish_game.as_json)
+    update!(gofish: gofish_game.as_json)
   end
 
   def start_game

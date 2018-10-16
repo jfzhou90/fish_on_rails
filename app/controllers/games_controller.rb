@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pusher'
 require('./app/models/gofish_game')
 
 class GamesController < ApplicationController
@@ -15,15 +16,16 @@ class GamesController < ApplicationController
   end
 
   def show
-    go_fish = Game.get_game(params[:id])
-    render :show, locals: { game: go_fish, user: current_user.username, id: params[:id] }
+    game = Game.find(params[:id])
+    redirect_to menu_index_path unless game
+    render :show, locals: { game: game.gofish, user: current_user.username, id: params[:id] }
   end
 
   def update
     game = Game.find(params[:id])
     redirect_to menu_index_path unless game.users.include?(current_user)
     game.play_round(params[:player], params[:rank])
-    redirect_to game_path(params[:id])
+    Pusher.trigger("game#{params[:id]}", 'refresh', { message: 'refresh' })
   end
 
   private

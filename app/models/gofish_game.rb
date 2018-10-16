@@ -6,12 +6,12 @@ require_relative('./player')
 class GoFishGame # rubocop:disable Metrics/ClassLength
   attr_reader :deck, :players, :winner, :game_id, :started, :player_count
 
-  def initialize(players: [], deck: CardDeck.new, round: 0, logs: [])
+  def initialize(players: [], deck: CardDeck.new, round: 0, logs: [], winner: nil)
     @deck = deck
     @players = players
     @round = round
     @logs = logs
-    @winner = nil
+    @winner = winner
   end
 
   def start

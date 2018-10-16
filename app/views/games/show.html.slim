@@ -4,6 +4,16 @@ ruby:
   message = game.winner ? "#{game.winner.name} Wins!" : "#{game.current_player.name}'s Turn"
 
 javascript:
+  var pusher = new Pusher('d99443f440ef4328b615', {
+    cluster: 'us2',
+    forceTLS: true
+  });
+
+  var channel = pusher.subscribe("game#{id}");
+  channel.bind('refresh', function(data) {
+    window.location.reload();
+  });
+
   const confirm_quit = () => {
     var result = confirm("Leaving? The AI will take over your turns if you leave.")
     if(result) {
@@ -36,5 +46,3 @@ javascript:
       = render "player", player: player
     - if !game.current_player.nil? && game.current_player.name == user
       = submit_tag('Play', class:'play__round')
-
-= console
