@@ -3,7 +3,7 @@
 require('spec_helper')
 require('./app/models/gofish_game')
 
-describe(GoFishGame) do
+describe(GoFishGame) do # rubocop:disable Metrics/BlockLength
   let(:game) { GoFishGame.new(deck: TestDeck.new) }
   let(:set) { [PlayingCard.new, PlayingCard.new, PlayingCard.new, PlayingCard.new] }
   let(:game_json) { game.as_json }
@@ -13,7 +13,6 @@ describe(GoFishGame) do
     count.times do |counter|
       game.add_player("Player#{counter}")
     end
-    game
   end
 
   describe('#add_player') do
@@ -80,6 +79,15 @@ describe(GoFishGame) do
       expect(game.winner.name).to_not eq('Player0')
       expect(game.winner.name).to eq('Player1')
     end
+
+    it('gets a draw if nobody wins.') do
+      create_players(2)
+      game.send(:go_to_next_player)
+      game.deck.send(:cards_left=, [])
+      game.any_winner?
+      expect(game.winner).to be(nil)
+      expect(game.last_ten_logs).to eq(['Draw!'])
+    end
   end
 
   describe('#transfer_cards') do
@@ -134,7 +142,7 @@ describe(GoFishGame) do
       game.start
       game.send(:go_to_next_player)
       expect(game.last_ten_logs.count > 5).to be(true)
-      expect(game.last_ten_logs.include?('Player1 wins the game!')).to be(true)
+      expect(game.last_ten_logs.include?('Player1 Wins!')).to be(true)
     end
   end
 

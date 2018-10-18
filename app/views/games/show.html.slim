@@ -1,7 +1,7 @@
 ruby:
   player = game.find_player(user)
   other_players = game.other_players(player)
-  message = game.winner ? "#{game.winner.name} Wins!" : "#{game.current_player.name}'s Turn"
+  message = game.status
 
 javascript:
   var pusher = new Pusher('d99443f440ef4328b615', {
@@ -45,4 +45,4 @@ javascript:
     .game__row--players.flex-row
       = render "player", player: player
     - if !game.current_player.nil? && game.current_player.name == user
-      = submit_tag('Play', class:'play__round')
+      = submit_tag('Play', class:'play__round') unless other_players.empty?

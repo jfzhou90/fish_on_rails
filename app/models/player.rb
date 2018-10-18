@@ -69,6 +69,8 @@ class Player
   end
 
   def self.from_json(player_json)
+    return nil if player_json.nil?
+
     Player.new(
       hand: player_json['hand'].map { |card| PlayingCard.from_json(card) },
       sets: player_json['sets'].map { |card| PlayingCard.from_json(card) },

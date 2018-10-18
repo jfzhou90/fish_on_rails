@@ -3,15 +3,20 @@
 require_relative('./deck')
 require_relative('./player')
 
-class GoFishGame # rubocop:disable Metrics/ClassLength
-  attr_reader :deck, :players, :winner, :game_id, :started, :player_count
+def deck_env
+  Rails.env.test? ? TestDeck.new : CardDeck.new
+end
 
-  def initialize(players: [], deck: CardDeck.new, round: 0, logs: [], winner: nil)
+class GoFishGame # rubocop:disable Metrics/ClassLength
+  attr_reader :deck, :players, :winner, :ended
+
+  def initialize(players: [], deck: deck_env, round: 0, logs: [], winner: nil)
     @deck = deck
     @players = players
     @round = round
     @logs = logs
     @winner = winner
+    @ended = false
   end
 
   def start
@@ -30,12 +35,16 @@ class GoFishGame # rubocop:disable Metrics/ClassLength
   end
 
   def any_winner?
-    players.any?(&:empty?) ? self.winner = highest_score_player : false
-    deck.empty? ? self.winner = highest_score_player : false
-    add_log("#{winner.name} wins the game!") if winner
+    return false unless players.any?(&:empty?) || deck.empty?
+
+    self.ended = true
+    self.winner = draw? ? nil : highest_score_player
+    add_log(status)
   end
 
   def play_round(player_name, rank)
+    return if ended
+
     player = find_player(player_name)
     player.any_rank?(rank) ? transfer_cards(player, rank) : go_fish(rank)
     any_winner?
@@ -75,7 +84,7 @@ class GoFishGame # rubocop:disable Metrics/ClassLength
       'players' => players.map(&:as_json),
       'round' => round,
       'logs' => logs,
-      'winner' => winner
+      'winner' => winner.as_json
     }
   end
 
@@ -85,15 +94,25 @@ class GoFishGame # rubocop:disable Metrics/ClassLength
       players: game_json['players'].map { |player| Player.from_json(player) },
       round: game_json['round'],
       logs: game_json['logs'],
-      winner: game_json['winner']
+      winner: Player.from_json(game_json['winner'])
     )
+  end
+
+  def status
+    if !winner && deck.empty? && !round.zero?
+      'Draw!'
+    elsif winner
+      "#{winner.name} Wins!"
+    else
+      "#{current_player.name}'s Turn"
+    end
   end
 
   private
 
   attr_reader :logs
   attr_accessor :round
-  attr_writer :winner, :started
+  attr_writer :winner, :ended
 
   def go_to_next_player
     self.round = round + 1
@@ -143,5 +162,9 @@ class GoFishGame # rubocop:disable Metrics/ClassLength
 
   def random_rank
     current_player.pick_random_rank
+  end
+
+  def draw?
+    players.map(&:points).count(highest_score_player.points) > 1
   end
 end

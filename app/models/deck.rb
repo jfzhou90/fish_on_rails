@@ -58,7 +58,7 @@ class TestDeck < CardDeck
   end
 
   def shuffle
-    # do nothing
+    # test deck dont shuffle
   end
 
   def shuffle_test

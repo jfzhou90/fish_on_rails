@@ -11,21 +11,25 @@ class GamesController < ApplicationController
   def create
     game = Game.pending.find_or_create_by(game_params)
     game.create_gofish_if_possible
-    game.start_if_possible(current_user) unless game.users.include?(current_user)
+    game.add_player_to_game(current_user) unless game.users.include?(current_user)
+    game.start_if_possible
     redirect_to game_path(game)
   end
 
   def show
-    game = Game.find(params[:id])
-    redirect_to menu_index_path unless game
-    render :show, locals: { game: game.gofish, user: current_user.username, id: params[:id] }
+    return redirect_to menu_index_path unless Game.exists?(params[:id])
+
+    gofish = Game.get_game(params[:id])
+    render :show, locals: { game: gofish, user: current_user.username, id: params[:id] }
   end
 
   def update
     game = Game.find(params[:id])
-    redirect_to menu_index_path unless game.users.include?(current_user)
+    return redirect_to menu_index_path unless game.users.include?(current_user)
+
     game.play_round(params[:player], params[:rank])
     Pusher.trigger("game#{params[:id]}", 'refresh', { message: 'refresh' })
+    redirect_to game
   end
 
   private
